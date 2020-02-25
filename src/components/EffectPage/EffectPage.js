@@ -2,10 +2,10 @@ import React, { Component } from "react";
 class EffectPageTempl extends Component {
 
     constructor(){
-        super(this.props)
+        super(this.props);
     }
 
-    
+
   render() {
     return (
       <div>
