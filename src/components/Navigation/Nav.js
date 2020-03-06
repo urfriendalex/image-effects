@@ -1,37 +1,46 @@
 import React, { useState, useEffect } from "react";
-import { NavLink } from "react-router-dom";
 import './Nav.css'
 
-function Nav() {
+function Nav(props) {
     const [pos, setPos] = useState(0);
+    const[currenEffect, setCurrentEffect] = useState(0);
 
-    useEffect(() => setPos(document.querySelector('.nav-link.active').getBoundingClientRect().left), []);
+    useEffect(() =>{
+      setCurrentEffect(1);
+      setPos(document.querySelector('.nav-link').getBoundingClientRect().left);
+    }, []);
 
     let moveLine= (e) => {
+        props.handleEffectChange(e.target.innerText);
         setPos(e.target.getBoundingClientRect().left);
     }
  return (
     <nav className="navbar navbar-bottom navbar-expand-sm navbar-dark bg-transparent">
       <ul className="navbar-links navbar-nav">
         <li className="nav-item">
-            <NavLink className="nav-link" activeClassName="active" onClick={moveLine} exact to="/1">
+            <button className="nav-link" onClick={moveLine}>
               1
-            </NavLink>
+            </button>
         </li>
         <li className="nav-item">
-          <NavLink className="nav-link" activeClassName="active" onClick={moveLine} to="/2">
+          <button className="nav-link" onClick={moveLine}>
             2
-          </NavLink>
+          </button>
         </li>
         <li className="nav-item">
-          <NavLink className="nav-link" activeClassName="active" onClick={moveLine}  to="/3">
+          <button className="nav-link" onClick={moveLine}>
             3
-          </NavLink>
+          </button>
         </li>
         <li className="nav-item">
-          <NavLink className="nav-link" activeClassName="active" onClick={moveLine} to="/4">
+          <button className="nav-link" onClick={moveLine}>
             4
-          </NavLink>
+          </button>
+        </li>
+        <li className="nav-item">
+          <button className="nav-link" onClick={moveLine}>
+            5
+          </button>
         </li>
       </ul>
       <span className="cross-line" style={{
