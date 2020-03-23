@@ -13,7 +13,7 @@ const MathUtils = {
   distance: (x1, y1, x2, y2) => Math.hypot(x2 - x1, y2 - y1),
   getRandomFloat: (min, max) => (Math.random() * (max - min) + min).toFixed(2)
 }
-
+let root = document.getElementById('root')
 let index = 0;
 let zIndexVal = 1;
 
@@ -21,7 +21,7 @@ class EffectPageTempl extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      search_input: "New York",
+      search_input: "",
       current_effect_key: 1,
       images: [],
       x: 0,
@@ -30,7 +30,7 @@ class EffectPageTempl extends Component {
       lastY: 0,
       cachedX: 0,
       cachedY: 0,
-      threshold: 80
+      threshold: 50
     }
     this.handleChange = this.handleChange.bind(this);
     this.fetchImagesByTitle = this.fetchImagesByTitle.bind(this);
@@ -57,16 +57,17 @@ class EffectPageTempl extends Component {
 
   updateImages() {
     this.fetchImagesByTitle().then(imgs => {
-      console.log(imgs);
-      this.setState({
-        images: imgs.data.results
-      })
+      	this.setState({
+        	images: imgs.data.results
+	  	})
     });
   }
 
   handleEffectChange(number){
+    number = Number(number);
     this.setState({
-      current_effect_key: number
+      current_effect_key: number,
+      threshold: [3, 4, 5].includes(number) ? 100 : number === 1 ? 50 : 80
     })
   }
 
@@ -83,6 +84,10 @@ class EffectPageTempl extends Component {
   handleMove(e) {
     this.getMousePos(e);
     if (this.state.images.length !== 0) {
+		root.style.setProperty('--color-title-main', `${this.state.images[0].color}`);
+		root.style.setProperty('--color-title-1', `${this.state.images[2].color}`);
+		root.style.setProperty('--color-title-2', `${this.state.images[5].color}`);
+		root.style.setProperty('--color-title-3', `${this.state.images[7].color}`);
       let imges_length = this.images_nodes.current.childNodes.length;
       let distance = MathUtils.distance(this.state.x, this.state.y, this.state.lastX, this.state.lastY)
       if (distance > this.state.threshold) {
@@ -118,15 +123,10 @@ class EffectPageTempl extends Component {
 
   showImage(index) {
     const img = this.images_nodes.current.childNodes[index];
-    // console.log(this.images_nodes);
-    // console.log(this.images_nodes.current.childNodes);
-    // console.log(this.images_nodes.current.childNodes[index]);
-    img.style.setProperty('--img-maxwidth', `${MathUtils.getRandomFloat(250, 400)}px`);
+    img.style.setProperty('--img-maxwidth', `${MathUtils.getRandomFloat(250, 350)}px`);
 
     TweenMax.killTweensOf(img);
-
-    console.log(this.state.current_effect_key);
-    this.effectMap.get(Number(this.state.current_effect_key))(img);
+    this.effectMap.get(this.state.current_effect_key)(img);
   }
 
   translateRandom(img) {
@@ -308,17 +308,17 @@ class EffectPageTempl extends Component {
       <div className='effect-page-container'>
         <div className="controls">
           <div className="form-group">
-            <select defaultValue="1" className="custom-select" name="" id="">
-              <option value="1">Select one</option>
-              <option value=""></option>
-              <option value=""></option>
-              <option value=""></option>
+            <select defaultValue="1" className="custom-select" name="theme-selector" id="theme-selector">
+              <option value="1">Dark</option>
+              <option value="2"></option>
+              <option value="3"></option>
+              <option value="4"></option>
             </select>
           </div>
           <div className="form-group search-img">
-            <input type="text" className="form-control" name="search-img" id="search-img " value={this.state.search_input} onChange={this.handleChange} placeholder="Some txt" />
+            <input autocomplete="off" type="text" className="form-control" name="search-img" id="search-img" placeholder="search images" value={this.state.search_input} onChange={this.handleChange} />
           </div>
-          <button type="button" className="btn btn-primary" onClick={this.updateImages}>click</button>
+          <button type="button" className="search-btn btn btn-primary" onClick={this.updateImages}>click</button>
         </div>
         <div className="content">
           <div className="content-imgs" ref={this.images_nodes} onMouseMove={this.handleMove}>{
@@ -330,9 +330,9 @@ class EffectPageTempl extends Component {
           <h3 className="content-title scroll1" title={this.state.search_input}>{this.state.search_input}</h3>
           <h3 className="content-title scroll2" title={this.state.search_input}>{this.state.search_input}</h3>
         </div>
-        <p>Mouse coordinates: {this.state.x} {this.state.y}</p>
+        {/* <p>Mouse coordinates: {this.state.x} {this.state.y}</p> */}
         <Nav current_effect={this.current_effect} handleEffectChange={this.handleEffectChange}/>
-      </div>
+    </div>
     );
   }
 }

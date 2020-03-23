@@ -3,10 +3,8 @@ import './Nav.css'
 
 function Nav(props) {
     const [pos, setPos] = useState(0);
-    const[currenEffect, setCurrentEffect] = useState(0);
 
     useEffect(() =>{
-      setCurrentEffect(1);
       setPos(document.querySelector('.nav-link').getBoundingClientRect().left);
     }, []);
 

@@ -7,7 +7,10 @@ html, body, #root{
 #root{
   --line-color: yellowgreen;
   --bg-color: #212121;
-  --color-title: orangered;
+  --color-title-main: orangered;
+  --color-title-1: orangered;
+  --color-title-2: orangered;
+  --color-title-3: orangered;
   --blendmode-title: lighten;
   --img-maxwidth: 250px;
 }
