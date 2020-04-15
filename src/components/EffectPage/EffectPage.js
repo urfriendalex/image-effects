@@ -1,13 +1,10 @@
 import React, { Component, createRef } from "react";
 import './EffectPage.css';
 import axios from 'axios';
-import { AuthInfo } from '../../AuthInfo';
 import { TweenMax, TimelineMax, Power1, Expo, Quint, Quad } from 'gsap';
 import Nav from "../Navigation/Nav";
 
 
-const UNSPLASH_API_BASE_URL = 'https://api.unsplash.com/';
-const ACCESS_KEY = AuthInfo.ACCESS_KEY;
 const MathUtils = {
   lerp: (a, b, n) => (1 - n) * a + n * b,
   distance: (x1, y1, x2, y2) => Math.hypot(x2 - x1, y2 - y1),
@@ -74,7 +71,7 @@ class EffectPageTempl extends Component {
   images_nodes = createRef();
 
   fetchImagesByTitle() {
-    return axios.get(`${UNSPLASH_API_BASE_URL}/search/photos/?client_id=${ACCESS_KEY}&query=${this.state.search_input}&page=1&per_page=20`)
+    return axios.get(`${process.env.REACT_APP_UNSPASH_API_BASE_URL}/search/photos/?client_id=${process.env.REACT_APP_ACCESS_KEY}&query=${this.state.search_input}&page=1&per_page=20`)
   }
 
   handleChange = (e) => {
@@ -123,7 +120,7 @@ class EffectPageTempl extends Component {
 
   showImage(index) {
     const img = this.images_nodes.current.childNodes[index];
-    img.style.setProperty('--img-maxwidth', `${MathUtils.getRandomFloat(250, 350)}px`);
+    img.style.setProperty('--img-maxwidth', `${MathUtils.getRandomFloat(400, 600)}px`);
 
     TweenMax.killTweensOf(img);
     this.effectMap.get(this.state.current_effect_key)(img);
@@ -316,7 +313,7 @@ class EffectPageTempl extends Component {
             </select>
           </div>
           <div className="form-group search-img">
-            <input autocomplete="off" type="text" className="form-control" name="search-img" id="search-img" placeholder="search images" value={this.state.search_input} onChange={this.handleChange} />
+            <input autoComplete="off" type="text" className="form-control" name="search-img" id="search-img" placeholder="search images" value={this.state.search_input} onChange={this.handleChange} />
           </div>
           <button type="button" className="search-btn btn btn-primary" onClick={this.updateImages}>click</button>
         </div>
