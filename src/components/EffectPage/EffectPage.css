@@ -19,6 +19,7 @@
 	top: 0;
 	opacity: 0;
 	will-change: transform;
+	object-fit: cover;
 	/* filter: var(--filter-img); */
 }
 
